@@ -1,0 +1,7 @@
+# Custom Postgres 16 image with pg_partman pre-installed.
+# pg_partman is not included in the official postgres image.
+FROM postgres:16
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends postgresql-16-partman \
+    && rm -rf /var/lib/apt/lists/*

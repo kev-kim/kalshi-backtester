@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.kalshi.com)",
+      "Bash(openssl genrsa *)",
+      "Bash(docker compose *)"
+    ]
+  }
+}
