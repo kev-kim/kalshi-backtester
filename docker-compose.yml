@@ -15,7 +15,7 @@ x-common-env: &common-env
 
 secrets:
   kalshi_private_key:
-    file: ${KALSHI_PRIVATE_KEY_PATH:-./secrets/kalshi_private_key.pem}
+    file: ${KALSHI_PRIVATE_KEY_FILE:-./secrets/kalshi_private_key.pem}
 
 services:
   postgres:
@@ -57,7 +57,8 @@ services:
     environment:
       <<: *common-env
     secrets:
-      - kalshi_private_key
+      - source: kalshi_private_key
+        mode: 0444
     healthcheck:
       test: ["CMD", "python", "-c",
              "import asyncio,asyncpg,os; asyncio.run(asyncpg.connect(os.environ['POSTGRES_DSN']))"]
@@ -78,7 +79,8 @@ services:
     environment:
       <<: *common-env
     secrets:
-      - kalshi_private_key
+      - source: kalshi_private_key
+        mode: 0444
     healthcheck:
       test: ["CMD", "python", "-c",
              "import asyncio,asyncpg,os; asyncio.run(asyncpg.connect(os.environ['POSTGRES_DSN']))"]
