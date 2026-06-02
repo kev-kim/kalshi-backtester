@@ -13,10 +13,6 @@ x-common-env: &common-env
   ORDERBOOK_POLL_INTERVAL_MS: ${ORDERBOOK_POLL_INTERVAL_MS:-1000}
   DISCOVERY_INTERVAL_SEC: ${DISCOVERY_INTERVAL_SEC:-60}
 
-secrets:
-  kalshi_private_key:
-    file: ${KALSHI_PRIVATE_KEY_FILE:-./secrets/kalshi_private_key.pem}
-
 services:
   postgres:
     build:
@@ -56,9 +52,8 @@ services:
         condition: service_healthy
     environment:
       <<: *common-env
-    secrets:
-      - source: kalshi_private_key
-        mode: 0444
+    volumes:
+      - ${KALSHI_PRIVATE_KEY_FILE:-./secrets/kalshi_private_key.pem}:/run/secrets/kalshi_private_key:ro
     healthcheck:
       test: ["CMD", "python", "-c",
              "import asyncio,asyncpg,os; asyncio.run(asyncpg.connect(os.environ['POSTGRES_DSN']))"]
@@ -78,9 +73,8 @@ services:
         condition: service_healthy
     environment:
       <<: *common-env
-    secrets:
-      - source: kalshi_private_key
-        mode: 0444
+    volumes:
+      - ${KALSHI_PRIVATE_KEY_FILE:-./secrets/kalshi_private_key.pem}:/run/secrets/kalshi_private_key:ro
     healthcheck:
       test: ["CMD", "python", "-c",
              "import asyncio,asyncpg,os; asyncio.run(asyncpg.connect(os.environ['POSTGRES_DSN']))"]
